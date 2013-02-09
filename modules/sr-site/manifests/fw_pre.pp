@@ -37,6 +37,11 @@ class sr-site::fw_pre {
     ensure  => present,
   }
 
+  # LOG and ACCEPT a packet
+  firewallchain { 'LOG_ACCEPT:filter:IPv4':
+    ensure  => present,
+  }
+
   # Allow ICMP on the INPUT chain
   firewall { "000 accept all icmp":
     proto  => "icmp",
@@ -365,4 +370,186 @@ class sr-site::fw_pre {
     action => "accept",
   }
 
+  ###### FORWARD CHAIN ######
+
+  # Allow ICMP on the FORWARD chain
+  firewall { "FWD: 000 accept all icmp":
+    chain  => "FORWARD",
+    proto  => "icmp",
+    action => "accept",
+  }
+
+  # Allow all traffic attached to established connections. Important for
+  # connections made by the server.
+  firewall { "000 FORWARD allow related and established":
+    chain => "FORWARD",
+    state => ["RELATED", "ESTABLISHED"],
+    action => "accept",
+    proto => "all",
+  }
+
+  # Allow traffic to Badger
+  firewall { "001 Allow to Badger":
+    chain => "FORWARD",
+    proto => "tcp",
+    destination => ['176.58.112.199/32'],
+    jump => "LOG_ACCEPT",
+  }
+
+  # GoDaddy OCSP and CRLs
+  firewall { "002 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    destination => ["72.167.18.237", "72.167.18.238", "72.167.18.239", "72.167.239.237", "72.167.239.238", "72.167.239.239", "188.121.36.237", "188.121.36.238", "188.121.36.239", "182.50.136.237", "182.50.136.238", "182.50.136.239", "50.63.243.228", "50.63.243.229", "50.63.243.230"],
+    jump => "LOG_ACCEPT",
+  }
+
+  firewall { "003 Allow authenticated users":
+    chain => "FORWARD",
+    jump => "is_authenticated",
+  }
+
+  firewall { "004 Deny all other traffic":
+    chain => "FORWARD",
+    action => "reject",
+  }
+
+  firewall { "management_access - Default rule":
+    chain => "management_access",
+    outiface => "vlan102",
+    proto => "tcp",
+    jump => "LOG_ACCEPT,
+  }
+
+  firewall { "competitor_access - Default rule":
+    chain => "competitor_access",
+    outiface => "vlan103",
+    proto => "tcp",
+    jump => "LOG_ACCEPT,
+  }
+
+  firewall { "staff_access - Default rule":
+    chain => "staff_access",
+    outiface => "vlan104",
+    proto => "tcp",
+    jump => "LOG_ACCEPT,
+  }
+
+  firewall { "compnet_access - Default rule":
+    chain => "compnet_access",
+    outiface => "vlan105",
+    proto => "tcp",
+    jump => "LOG_ACCEPT,
+  }
+
+  firewall { "video_access - Default rule":
+    chain => "competitor_access",
+    outiface => "vlan106",
+    proto => "tcp",
+    jump => "LOG_ACCEPT,
+  }
+
+  firewall { "internet_access - ICMP ping request":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "icmp",
+    icmp => 8
+  }
+
+  firewall { "internet_access - HTTP":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 80,
+  }
+
+  firewall { "internet_access - HTTPS":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 443,
+  }
+
+  firewall { "internet_access - HTTP Alt":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 8080,
+  }
+
+  firewall { "internet_access - HTTPS Alt":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 8443,
+  }
+
+  firewall { "internet_access - SSH":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 22,
+  }
+
+  firewall { "internet_access - SMTP/SSL":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 465,
+  }
+
+  firewall { "internet_access - Submission":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 587,
+  }
+
+  firewall { "internet_access - IMAP/SSL":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 993,
+  }
+
+  firewall { "internet_access - IMAP":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 220,
+  }
+
+  firewall { "internet_access - IMAP":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 143,
+  }
+
+  firewall { "internet_access - POP3/SSL":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 995,
+  }
+
+  firewall { "internet_access - POP3":
+    chain => "internet_access",
+    outiface => "vlan107",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 110,
+  }
 }
