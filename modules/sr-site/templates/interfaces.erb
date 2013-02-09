@@ -1,0 +1,266 @@
+# LOOPBACK
+auto lo
+iface lo inet loopback
+
+# VLAN 107 - UPSTREAM
+auto vlan107
+iface vlan107 inet dhcp
+	<% if devmode == "1" then lestring="hwaddress ether 00:06:4f:9a:74:09" else lestring="" end %><%= lestring %>
+	vlan-raw-device eth0
+
+# VLAN 1 - Infrastructure/Management network
+auto vlan102
+iface vlan102 inet static
+	address 172.18.2.1
+	network 172.18.2.0
+	netmask 255.255.255.0
+	vlan-raw-device eth0
+
+# VLAN 103 - Competitor network
+auto vlan103
+iface vlan103 inet static
+	address 172.19.0.1
+	network 172.19.0.0
+	netmask 255.255.255.0
+	vlan-raw-device eth0
+
+### VLAN 103 - Alias 0 - Competitor PXE clients
+auto vlan103:0
+iface vlan103:0 inet static
+	address 172.18.7.1
+	network 172.18.7.0
+	netmask 255.255.255.0
+
+# VLAN 104 - Staff network
+auto vlan104
+iface vlan104 inet static
+	address 172.18.4.1
+	network 172.18.4.0
+	netmask 255.255.255.0
+	vlan-raw-device eth0
+
+### VLAN 104 - Alias 1 - Staff PXE clients
+auto vlan104:1
+iface vlan104:1 inet static
+	address 172.18.8.1
+	network 172.18.8.0
+	netmask 255.255.255.0
+
+# VLAN 105 - Competition Services
+auto vlan105
+iface vlan105 inet static
+	address 172.18.5.1
+	network 172.18.5.0
+	netmask 255.255.255.224
+	vlan-raw-device eth0
+
+# VLAN 106 - Video
+auto vlan106
+iface vlan106 inet static
+	address 172.18.6.1
+	network 172.18.6.0
+	netmask 255.255.255.224
+	vlan-raw-device eth0
+# Competitor network - Network Team ID 1
+auto vlan103:1
+iface vlan103:1 inet static
+	address 172.19.1.1
+	network 172.19.1.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 2
+auto vlan103:2
+iface vlan103:2 inet static
+	address 172.19.2.1
+	network 172.19.2.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 3
+auto vlan103:3
+iface vlan103:3 inet static
+	address 172.19.3.1
+	network 172.19.3.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 4
+auto vlan103:4
+iface vlan103:4 inet static
+	address 172.19.4.1
+	network 172.19.4.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 5
+auto vlan103:5
+iface vlan103:5 inet static
+	address 172.19.5.1
+	network 172.19.5.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 6
+auto vlan103:6
+iface vlan103:6 inet static
+	address 172.19.6.1
+	network 172.19.6.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 7
+auto vlan103:7
+iface vlan103:7 inet static
+	address 172.19.7.1
+	network 172.19.7.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 8
+auto vlan103:8
+iface vlan103:8 inet static
+	address 172.19.8.1
+	network 172.19.8.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 9
+auto vlan103:9
+iface vlan103:9 inet static
+	address 172.19.9.1
+	network 172.19.9.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 10
+auto vlan103:10
+iface vlan103:10 inet static
+	address 172.19.10.1
+	network 172.19.10.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 11
+auto vlan103:11
+iface vlan103:11 inet static
+	address 172.19.11.1
+	network 172.19.11.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 12
+auto vlan103:12
+iface vlan103:12 inet static
+	address 172.19.12.1
+	network 172.19.12.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 13
+auto vlan103:13
+iface vlan103:13 inet static
+	address 172.19.13.1
+	network 172.19.13.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 14
+auto vlan103:14
+iface vlan103:14 inet static
+	address 172.19.14.1
+	network 172.19.14.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 15
+auto vlan103:15
+iface vlan103:15 inet static
+	address 172.19.15.1
+	network 172.19.15.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 16
+auto vlan103:16
+iface vlan103:16 inet static
+	address 172.19.16.1
+	network 172.19.16.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 17
+auto vlan103:17
+iface vlan103:17 inet static
+	address 172.19.17.1
+	network 172.19.17.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 18
+auto vlan103:18
+iface vlan103:18 inet static
+	address 172.19.18.1
+	network 172.19.18.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 19
+auto vlan103:19
+iface vlan103:19 inet static
+	address 172.19.19.1
+	network 172.19.19.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 20
+auto vlan103:20
+iface vlan103:20 inet static
+	address 172.19.20.1
+	network 172.19.20.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 21
+auto vlan103:21
+iface vlan103:21 inet static
+	address 172.19.21.1
+	network 172.19.21.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 22
+auto vlan103:22
+iface vlan103:22 inet static
+	address 172.19.22.1
+	network 172.19.22.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 23
+auto vlan103:23
+iface vlan103:23 inet static
+	address 172.19.23.1
+	network 172.19.23.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 24
+auto vlan103:24
+iface vlan103:24 inet static
+	address 172.19.24.1
+	network 172.19.24.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 25
+auto vlan103:25
+iface vlan103:25 inet static
+	address 172.19.25.1
+	network 172.19.25.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 26
+auto vlan103:26
+iface vlan103:26 inet static
+	address 172.19.26.1
+	network 172.19.26.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 27
+auto vlan103:27
+iface vlan103:27 inet static
+	address 172.19.27.1
+	network 172.19.27.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 28
+auto vlan103:28
+iface vlan103:28 inet static
+	address 172.19.28.1
+	network 172.19.28.0
+	netmask 255.255.255.0
+
+# Competitor network - Network Team ID 29
+auto vlan103:29
+iface vlan103:29 inet static
+	address 172.19.29.1
+	network 172.19.29.0
+	netmask 255.255.255.0
+
