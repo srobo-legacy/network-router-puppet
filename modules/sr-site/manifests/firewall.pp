@@ -2,7 +2,7 @@ class sr-site::firewall {
 
   # Always persist firewall rules
   exec { 'persist-firewall':
-    command     => '/sbin/iptables-save > /etc/sysconfig/iptables',
+    command     => '/sbin/iptables-save > /etc/iptables.rules',
     refreshonly => true,
   }
 
