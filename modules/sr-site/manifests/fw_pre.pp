@@ -414,42 +414,42 @@ class sr-site::fw_pre {
     action => "reject",
   }
 
-  firewall { "management_access - Default rule":
-    chain => "management_access",
+  firewall { "00 0management_access - Default rule":
+    chain => "management access",
     outiface => "vlan102",
     proto => "tcp",
-    jump => "LOG_ACCEPT,
+    jump => "LOG_ACCEPT",
   }
 
-  firewall { "competitor_access - Default rule":
-    chain => "competitor_access",
+  firewall { "000 competitor_access - Default rule":
+    chain => "competitor access",
     outiface => "vlan103",
     proto => "tcp",
-    jump => "LOG_ACCEPT,
+    jump => "LOG_ACCEPT",
   }
 
-  firewall { "staff_access - Default rule":
+  firewall { "000 staff_access - Default rule":
     chain => "staff_access",
     outiface => "vlan104",
     proto => "tcp",
-    jump => "LOG_ACCEPT,
+    jump => "LOG_ACCEPT",
   }
 
-  firewall { "compnet_access - Default rule":
+  firewall { "000 compnet_access - Default rule":
     chain => "compnet_access",
     outiface => "vlan105",
     proto => "tcp",
-    jump => "LOG_ACCEPT,
+    jump => "LOG_ACCEPT",
   }
 
-  firewall { "video_access - Default rule":
+  firewall { "000 video_access - Default rule":
     chain => "competitor_access",
     outiface => "vlan106",
     proto => "tcp",
-    jump => "LOG_ACCEPT,
+    jump => "LOG_ACCEPT",
   }
 
-  firewall { "internet_access - ICMP ping request":
+  firewall { "000 internet_access - ICMP ping request":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -457,7 +457,7 @@ class sr-site::fw_pre {
     icmp => 8
   }
 
-  firewall { "internet_access - HTTP":
+  firewall { "001 - internet_access - HTTP":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -465,7 +465,7 @@ class sr-site::fw_pre {
     dport => 80,
   }
 
-  firewall { "internet_access - HTTPS":
+  firewall { "002 - internet_access - HTTPS":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -473,7 +473,7 @@ class sr-site::fw_pre {
     dport => 443,
   }
 
-  firewall { "internet_access - HTTP Alt":
+  firewall { "003 internet_access - HTTP Alt":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -481,7 +481,7 @@ class sr-site::fw_pre {
     dport => 8080,
   }
 
-  firewall { "internet_access - HTTPS Alt":
+  firewall { "004 internet_access - HTTPS Alt":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -489,7 +489,7 @@ class sr-site::fw_pre {
     dport => 8443,
   }
 
-  firewall { "internet_access - SSH":
+  firewall { "005 internet_access - SSH":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -497,7 +497,7 @@ class sr-site::fw_pre {
     dport => 22,
   }
 
-  firewall { "internet_access - SMTP/SSL":
+  firewall { "006 - internet_access - SMTP/SSL":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -505,7 +505,7 @@ class sr-site::fw_pre {
     dport => 465,
   }
 
-  firewall { "internet_access - Submission":
+  firewall { "007 - internet_access - Submission":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -513,7 +513,7 @@ class sr-site::fw_pre {
     dport => 587,
   }
 
-  firewall { "internet_access - IMAP/SSL":
+  firewall { "008 internet_access - IMAP/SSL":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -521,7 +521,7 @@ class sr-site::fw_pre {
     dport => 993,
   }
 
-  firewall { "internet_access - IMAP":
+  firewall { "009 internet_access - IMAP3":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -529,7 +529,7 @@ class sr-site::fw_pre {
     dport => 220,
   }
 
-  firewall { "internet_access - IMAP":
+  firewall { "010 internet_access - IMAP4":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -537,7 +537,7 @@ class sr-site::fw_pre {
     dport => 143,
   }
 
-  firewall { "internet_access - POP3/SSL":
+  firewall { "011 internet_access - POP3/SSL":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
@@ -545,7 +545,7 @@ class sr-site::fw_pre {
     dport => 995,
   }
 
-  firewall { "internet_access - POP3":
+  firewall { "012 internet_access - POP3":
     chain => "internet_access",
     outiface => "vlan107",
     jump => "LOG_ACCEPT",
