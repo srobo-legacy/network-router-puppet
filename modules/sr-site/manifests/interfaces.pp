@@ -1,4 +1,8 @@
 class sr-site::interfaces {
+  package { 'vlan':
+    ensure => 'present',
+  }
+
   file { '/etc/network/interfaces':
     ensure => present,
     owner => 'root',

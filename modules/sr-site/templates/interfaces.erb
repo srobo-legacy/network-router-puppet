@@ -2,11 +2,17 @@
 auto lo
 iface lo inet loopback
 
+<% if devmode == "1" %>
+# ETH1 - UPSTREAM
+auto eth1 
+iface eth1 inet dhcp
+<% else %>
 # VLAN 107 - UPSTREAM
 auto vlan107
 iface vlan107 inet dhcp
-	<% if devmode == "1" then lestring="hwaddress ether 00:06:4f:9a:74:09" else lestring="" end %><%= lestring %>
+	hwaddress ether 00:06:4f:9a:74:09
 	vlan-raw-device eth0
+<% end %>
 
 # VLAN 1 - Infrastructure/Management network
 auto vlan102
