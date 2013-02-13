@@ -29,6 +29,8 @@ class sr-site( $git_root ) {
 
   include sr-site::interfaces
   include sr-site::firewall
+  include sr-site::freeradius
+  include sr-site::mysql
 
 }
 
