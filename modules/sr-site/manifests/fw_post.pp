@@ -4,4 +4,8 @@ class sr-site::fw_post {
     action  => 'drop',
   }  
 
+  firewall { '999 drop all':
+    chain => 'FORWARD',
+    action  => 'drop',
+  }  
 }

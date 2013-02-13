@@ -373,7 +373,7 @@ class sr-site::fw_pre {
   ###### FORWARD CHAIN ######
 
   # Allow ICMP on the FORWARD chain
-  firewall { "FWD: 000 accept all icmp":
+  firewall { "000 forward all icmp":
     chain  => "FORWARD",
     proto  => "icmp",
     action => "accept",
@@ -381,7 +381,7 @@ class sr-site::fw_pre {
 
   # Allow all traffic attached to established connections. Important for
   # connections made by the server.
-  firewall { "000 FORWARD allow related and established":
+  firewall { "001 FORWARD allow related and established":
     chain => "FORWARD",
     state => ["RELATED", "ESTABLISHED"],
     action => "accept",
@@ -389,7 +389,7 @@ class sr-site::fw_pre {
   }
 
   # Allow traffic to Badger
-  firewall { "001 Allow to Badger":
+  firewall { "002 Allow to Badger":
     chain => "FORWARD",
     proto => "tcp",
     destination => ['176.58.112.199/32'],
@@ -397,61 +397,154 @@ class sr-site::fw_pre {
   }
 
   # GoDaddy OCSP and CRLs
-  firewall { "002 GoDaddy OCSP/CRLs":
+  firewall { "003 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
-    destination => ["72.167.18.237", "72.167.18.238", "72.167.18.239", "72.167.239.237", "72.167.239.238", "72.167.239.239", "188.121.36.237", "188.121.36.238", "188.121.36.239", "182.50.136.237", "182.50.136.238", "182.50.136.239", "50.63.243.228", "50.63.243.229", "50.63.243.230"],
+    dport => 80,
+    destination => "72.167.18.237", 
     jump => "LOG_ACCEPT",
   }
-
-  firewall { "003 Allow authenticated users":
+  firewall { "004 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.18.238", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "005 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.18.239", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "006 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.239.237", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "007 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.239.238", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "008 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.239.239", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "009 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "188.121.36.237", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "010 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "188.121.36.238", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "011 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "188.121.36.239", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "012 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "182.50.136.237", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "013 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "182.50.136.238", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "014 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "182.50.136.239", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "015 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "50.63.243.228", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "016 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "50.63.243.229", 
+    jump => "LOG_ACCEPT",
+  }
+  firewall { "017 GoDaddy OCSP/CRLs":
+    chain => "FORWARD",
+    proto => "tcp",
+    dport => 80,
+    destination => "50.63.243.230",
+    jump => "LOG_ACCEPT",
+  }
+  
+  firewall { "018 Allow authenticated users":
     chain => "FORWARD",
     jump => "is_authenticated",
   }
 
-  firewall { "004 Deny all other traffic":
+  firewall { "019 Deny all other traffic":
     chain => "FORWARD",
     action => "reject",
   }
 
-  firewall { "00 0management_access - Default rule":
-    chain => "management access",
-    outiface => "vlan102",
+  firewall { "000 management_access - Default rule":
+    chain => "management_access",
     proto => "tcp",
     jump => "LOG_ACCEPT",
   }
 
   firewall { "000 competitor_access - Default rule":
-    chain => "competitor access",
-    outiface => "vlan103",
+    chain => "competitor_access",
     proto => "tcp",
     jump => "LOG_ACCEPT",
   }
 
   firewall { "000 staff_access - Default rule":
     chain => "staff_access",
-    outiface => "vlan104",
     proto => "tcp",
     jump => "LOG_ACCEPT",
   }
 
   firewall { "000 compnet_access - Default rule":
     chain => "compnet_access",
-    outiface => "vlan105",
     proto => "tcp",
     jump => "LOG_ACCEPT",
   }
 
   firewall { "000 video_access - Default rule":
     chain => "competitor_access",
-    outiface => "vlan106",
     proto => "tcp",
     jump => "LOG_ACCEPT",
   }
 
   firewall { "000 internet_access - ICMP ping request":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "icmp",
     icmp => 8
@@ -459,7 +552,6 @@ class sr-site::fw_pre {
 
   firewall { "001 - internet_access - HTTP":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 80,
@@ -467,7 +559,6 @@ class sr-site::fw_pre {
 
   firewall { "002 - internet_access - HTTPS":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 443,
@@ -475,7 +566,6 @@ class sr-site::fw_pre {
 
   firewall { "003 internet_access - HTTP Alt":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 8080,
@@ -483,7 +573,6 @@ class sr-site::fw_pre {
 
   firewall { "004 internet_access - HTTPS Alt":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 8443,
@@ -491,7 +580,6 @@ class sr-site::fw_pre {
 
   firewall { "005 internet_access - SSH":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 22,
@@ -499,7 +587,6 @@ class sr-site::fw_pre {
 
   firewall { "006 - internet_access - SMTP/SSL":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 465,
@@ -507,7 +594,6 @@ class sr-site::fw_pre {
 
   firewall { "007 - internet_access - Submission":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 587,
@@ -515,7 +601,6 @@ class sr-site::fw_pre {
 
   firewall { "008 internet_access - IMAP/SSL":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 993,
@@ -523,7 +608,6 @@ class sr-site::fw_pre {
 
   firewall { "009 internet_access - IMAP3":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 220,
@@ -531,7 +615,6 @@ class sr-site::fw_pre {
 
   firewall { "010 internet_access - IMAP4":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 143,
@@ -539,7 +622,6 @@ class sr-site::fw_pre {
 
   firewall { "011 internet_access - POP3/SSL":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 995,
@@ -547,7 +629,6 @@ class sr-site::fw_pre {
 
   firewall { "012 internet_access - POP3":
     chain => "internet_access",
-    outiface => "vlan107",
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 110,
