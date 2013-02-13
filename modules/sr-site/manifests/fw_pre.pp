@@ -538,7 +538,7 @@ class sr-site::fw_pre {
   }
 
   firewall { "000 video_access - Default rule":
-    chain => "competitor_access",
+    chain => "video_access",
     proto => "tcp",
     jump => "LOG_ACCEPT",
   }
