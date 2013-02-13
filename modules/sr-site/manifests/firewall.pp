@@ -29,5 +29,14 @@ class sr-site::firewall {
   include sr-site::fw_pre
   include sr-site::fw_post
 
+  # Firewall init script
+  file { '/etc/init.d/firewall':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '755',
+    source => 'puppet:///modules/sr-site/firewall.init',
+  }
+
 }
 

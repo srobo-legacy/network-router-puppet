@@ -1,0 +1,56 @@
+#!/bin/sh -e
+### BEGIN INIT INFO
+# Provides:          firewall
+# Required-Start:    mountkernfs $local_fs $remote_fs
+# Required-Stop:     $local_fs $remote_fs
+# Should-Start:      
+# Should-Stop:       
+# Default-Start:     S
+# Default-Stop:      0 1 6
+# Short-Description: Configure the firewall.
+### END INIT INFO
+
+PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
+
+[ -x /sbin/iptables ] || exit 0
+
+. /lib/lsb/init-functions
+
+case "$1" in
+start)
+	log_action_begin_msg "Setting up firewall"
+	if iptables-restore < /etc/iptables.rules; then
+	    log_action_end_msg $?
+	else
+	    log_action_end_msg $?
+	fi
+	;;
+
+stop)
+	log_action_begin_msg "Deconfiguring firewall"
+	iptables -P INPUT ACCEPT
+	iptables -P FORWARD ACCEPT
+	iptables -P OUTPUT ACCEPT
+	ip6tables -P INPUT ACCEPT
+	ip6tables -P FORWARD ACCEPT
+	ip6tables -P OUTPUT ACCEPT
+	ip6tables -F
+	if iptables -F; then
+	    log_action_end_msg $?
+	else
+	    log_action_end_msg $?
+	fi
+	;;
+
+force-reload|restart)
+	$0 stop
+	$0 start
+	;;
+
+*)
+	echo "Usage: /etc/init.d/firewall {start|stop|force-reload|restart}"
+	exit 1
+	;;
+esac
+
+exit 0
