@@ -6,6 +6,14 @@ class sr-site::firewall {
     refreshonly => true,
   }
 
+  # Always persist firewall rules
+  service { 'firewall':
+    ensure      => running,
+    enable      => true,
+    hasrestart  => true,
+    hasstatus   => false,
+  }
+
   # These defaults ensure that the persistence command is executed after 
   # every change to the firewall, and that pre & post classes are run in the
   # right order to avoid potentially locking you out of your box during the
@@ -36,6 +44,7 @@ class sr-site::firewall {
     group => 'root',
     mode => '755',
     source => 'puppet:///modules/sr-site/firewall.init',
+    before => Service['firewall'],
   }
 
 }
