@@ -32,5 +32,7 @@ class sr-site( $git_root ) {
   include sr-site::freeradius
   include sr-site::mysql
 
+  class { "sr-live" }
+
 }
 
