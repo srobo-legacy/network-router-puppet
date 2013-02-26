@@ -63,6 +63,15 @@ class sr-site::fw_pre {
     proto => "all",
   }
 
+  if($devmode){
+    firewall { "001 ssh for vagrant":
+      iniface => "eth0",
+      proto => "tcp",
+      dport => 22,
+      action => "accept",
+    }
+  }
+
   # Allow management network to connect to ssh.
   firewall { "002 ssh from management":
     iniface => "vlan102",
