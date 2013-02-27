@@ -1,0 +1,136 @@
+#! /bin/bash
+set -e
+
+### GENERATE A KEY FOR DDNS UPDATES
+mkdir -p /etc/bind/keys/
+pushd /etc/bind/keys > /dev/null 2>&1
+rm -f *localhost*.key || true
+rm -f *localhost*.private || true
+DDNS_KEYNAME=`dnssec-keygen -a HMAC-MD5 -b 128 -r /dev/urandom -n host localhost.`
+DDNS_KEY=`grep -E "^Key:" ${DDNS_KEYNAME}.private | awk '{print $2;}'`
+
+### PUT THE KEY IN THE CONF FILE
+cat <<EOF > /etc/bind/keys.conf
+key "localhost." {
+        algorithm hmac-md5;
+        secret "${DDNS_KEY}";
+};
+EOF
+
+### ENSURE NOBODY CAN READ THE KEY EXCEPT ROOT AND DNS ADMINS
+chmod g+r /etc/bind/keys/${DDNS_KEYNAME}.private
+chgrp sr-dnsadmins /etc/bind/keys/${DDNS_KEYNAME}.private
+chmod g+r /etc/bind/keys/${DDNS_KEYNAME}.key
+chgrp sr-dnsadmins /etc/bind/keys/${DDNS_KEYNAME}.key
+
+
+### START GENERATING SOME ZONES
+
+maxSubnets=30 # How many subnets?
+
+### HEADER OF 18.172.in-addr.arpa. ZONE
+cat <<EOF >/etc/bind/db.172.18
+;
+; BIND data file for reverse DNS for 172.18.x.x
+;
+$TTL	604800
+@	IN	SOA	18.172.in-addr.arpa. committee.studentrobotics.org. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	router.net.studentrobotics.org.
+1.2	IN	PTR	router.net.studentrobotics.org.
+EOF
+
+### DYNAMICALLY GENERATED 18.172.in-addr.arpa. ZONE
+subnet=2
+while [ $subnet -le 7 ]; do 
+	echo "\$ORIGIN ${subnet}.18.172.in-addr.arpa." >> /etc/bind/db.172.18
+	addr=2
+	while [ $addr -lt 255 ]; do 
+		echo -e "${addr}\tIN\tPTR\tip-${subnet}-${addr}.net.studentrobotics.org." >> /etc/bind/db.172.18
+		addr=$(expr $addr + 1)
+	done
+	subnet=$(expr ${subnet} + 1)
+done
+
+### HEADER OF 19.172.in-addr.arpa. ZONE
+cat <<EOF >/etc/bind/db.172.19
+;
+; BIND data file for Reverse DNS for 172.19.x.x
+;
+\$TTL	604800
+@	IN	SOA	19.172.in-addr.arpa. committee.studentrobotics.org. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	router.net.studentrobotics.org.
+1.0	IN	PTR	router.regnet.net.studentrobotics.org.
+EOF
+
+### DYNAMICALLY GENERATED 19.172.in-addr.arpa. ZONE
+subnet=1
+while [ $subnet -le $maxSubnets ]; do 
+	echo "\$ORIGIN ${subnet}.19.172.in-addr.arpa." >> /etc/bind/db.172.19
+	echo -e "1\tIN\tPTR\trouter.team${subnet}.net.studentrobotics.org." >> /etc/bind/db.172.19
+	addr=10
+	while [ $addr -lt 255 ]; do 
+		echo -e "${addr}\tIN\tPTR\tip-${addr}.team${subnet}.net.studentrobotics.org." >> /etc/bind/db.172.19
+		addr=$(expr $addr + 1)
+	done
+	subnet=$(expr ${subnet} + 1)
+done
+
+### HEADER OF net.studentrobotics.org. ZONE
+
+cat <<EOF >/etc/bind/db.net.studentrobotics.org
+;
+; BIND data file for net.studentrobotics.org.
+;
+\$TTL	604800
+@	IN	SOA	net.studentrobotics.org. committee.studentrobotics.org. (
+			      2		; Serial
+			 604800		; Refresh
+			  86400		; Retry
+			2419200		; Expire
+			 604800 )	; Negative Cache TTL
+;
+@	IN	NS	router.net.studentrobotics.org.
+@	IN	A	172.18.2.1
+router	IN	A	172.18.2.1
+gateway	IN	CNAME	router
+network	IN	CNAME	router
+status	IN	CNAME	router
+auth	IN	CNAME	router
+ntop	IN	CNAME	router
+
+router.regnet	IN	CNAME	router
+
+EOF
+
+### DYNAMIC CREATION OF teamX.net.studentrobotics.org. ZONE
+subnet=1
+while [ $subnet -le $maxSubnets ]; do 
+	echo "\$ORIGIN team${subnet}.net.studentrobotics.org." >> /etc/bind/db.net.studentrobotics.org
+	echo -e "router\tIN\tA\t172.30.${subnet}.1" >> /etc/bind/db.net.studentrobotics.org
+	addr=10
+	while [ $addr -lt 255 ]; do 
+		echo -e "ip-${addr}\tIN\tA\t172.19.${subnet}.${addr}" >> /etc/bind/db.net.studentrobotics.org
+		addr=$(expr $addr + 1)
+	done
+	subnet=$(expr ${subnet} + 1)
+done
+
+popd > /dev/null 2>&1
+
+# FIX PERMISSIONS
+chown root:sr-dnsadmins /etc/bind/
+chmod g+w /etc/bind/
+usermod -a -G sr-dnsadmins bind
+
