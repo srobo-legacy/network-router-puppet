@@ -27,6 +27,8 @@ class sr-site( $git_root ) {
     require => File['/usr/local/var'],
   }
 
+  include bee
+
   include sr-site::interfaces
   include sr-site::firewall
   include sr-site::freeradius
