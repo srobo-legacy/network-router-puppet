@@ -40,6 +40,18 @@ class sr-live {
     require => Vcsrepo[ "/usr/share/sr-live-image/" ],
   }
 
+  file { "/etc/default/nfs-common":
+    ensure => 'link',
+    target => "/usr/share/sr-live-image/core/system-config/nfs-common.sr",
+    require => Vcsrepo[ "/usr/share/sr-live-image/" ],
+  }
+
+  file { "/etc/default/nfs-kernel-server":
+    ensure => 'link',
+    target => "/usr/share/sr-live-image/core/system-config/nfs-kernel-server.sr",
+    require => Vcsrepo[ "/usr/share/sr-live-image/" ],
+  }
+
   exec { "/usr/local/bin/sr-live-init":
     path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
     creates => "/srv/tftp/config/common.cfg",
