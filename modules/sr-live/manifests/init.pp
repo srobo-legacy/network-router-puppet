@@ -41,6 +41,7 @@ class sr-live {
   }
 
   exec { "/usr/local/bin/sr-live-init":
+    path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
     creates => "/srv/tftp/config/common.cfg",
     require => [ Vcsrepo[ "/usr/share/sr-live-image/" ], Package["nfs-kernel-server"], Package["atftpd"] ],
   }
