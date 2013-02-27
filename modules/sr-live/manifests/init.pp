@@ -5,6 +5,18 @@ class sr-live {
     ensure => latest,
   }
 
+  service { "nfs-common":
+    ensure  => "running",
+    enable  => "true",
+    require => Package["nfs-common"],
+  }
+
+  service { "nfs-kernel-server":
+    ensure  => "running",
+    enable  => "true",
+    require => Package["nfs-kernel-server"],
+  }
+
   # live-build images base configs
   vcsrepo { "/usr/share/sr-live-image/":
     ensure => present,
@@ -44,12 +56,14 @@ class sr-live {
     ensure => 'link',
     target => "/usr/share/sr-live-image/core/system-config/nfs-common.sr",
     require => Vcsrepo[ "/usr/share/sr-live-image/" ],
+    notify => Service[ "nfs-common"],
   }
 
   file { "/etc/default/nfs-kernel-server":
     ensure => 'link',
     target => "/usr/share/sr-live-image/core/system-config/nfs-kernel-server.sr",
     require => Vcsrepo[ "/usr/share/sr-live-image/" ],
+    notify => Service[ "nfs-kernel-server"],
   }
 
   exec { "/usr/local/bin/sr-live-init":
