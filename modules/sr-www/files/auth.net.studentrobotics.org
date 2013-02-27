@@ -1,0 +1,29 @@
+<VirtualHost *:80>
+	ServerAdmin committee@studentrobotics.org
+
+	ServerName auth.net.studentrobotics.org
+	ServerAlias auth
+	DocumentRoot /usr/share/sr-captive-portal/www/auth
+	DirectoryIndex index.php
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /usr/share/sr-captive-portal/www/auth>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorDocument 404 /403.php
+
+	ErrorLog ${APACHE_LOG_DIR}/captive-portal-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/captive-portal-access.log combined
+
+</VirtualHost>

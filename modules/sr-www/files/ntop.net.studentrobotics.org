@@ -1,0 +1,38 @@
+<VirtualHost *:80>
+	ServerAdmin committee@studentrobotics.org
+
+	ServerName ntop.net.studentrobotics.org
+	ServerAlias ntop
+	DocumentRoot /var/www
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /usr/share/sr-captive-portal/www/auth>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	<Location />
+		Allow from 172.18.4.0/24
+		Deny from all
+		Order deny,allow
+	</Location>
+
+	ProxyRequests Off
+	ProxyPass / http://127.0.0.1:3000/
+	ProxyPassReverse / http://127.0.0.1:3000/
+
+	ErrorDocument 404 /403.php
+
+	ErrorLog ${APACHE_LOG_DIR}/ntop-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/ntop-access.log combined
+
+</VirtualHost>

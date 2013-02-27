@@ -1,0 +1,30 @@
+<VirtualHost *:80>
+	ServerAdmin committee@studentrobotics.org
+
+	DocumentRoot /usr/share/sr-captive-portal/www/redir
+	DirectoryIndex index.php
+	<Directory />
+		Options FollowSymLinks
+		AllowOverride None
+	</Directory>
+	<Directory /usr/share/sr-captive-portal/www/redir>
+		Options Indexes FollowSymLinks MultiViews
+		AllowOverride None
+		Order allow,deny
+		allow from all
+	</Directory>
+
+	ErrorDocument 404 /index.php
+
+	ErrorLog ${APACHE_LOG_DIR}/captive-redir-error.log
+
+	# Possible values include: debug, info, notice, warn, error, crit,
+	# alert, emerg.
+	LogLevel warn
+
+	CustomLog ${APACHE_LOG_DIR}/captive-redir-access.log combined
+
+	#RewriteEngine On
+	#RewriteRule (.*) http://auth.net.studentrobotics.org/?from=http://%{HTTP_HOST}$1 [L,QSA]
+
+</VirtualHost>
