@@ -34,6 +34,8 @@ class sr-site( $git_root ) {
   include sr-site::freeradius
   include sr-site::mysql
 
+  include sr-router
+
   class { "sr-www":
     git_root => $git_root,
     www_root => "/var/www",
