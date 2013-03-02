@@ -23,7 +23,7 @@ class sr-www::captive-portal($git_root){
   }
 
   # Symlink the captive portal files into place
-  file{ "/usr/share/sr-catpive-portal":
+  file{ "/usr/share/sr-captive-portal":
     ensure => "link",
     target => "/opt/sr/captive-portal/files/usr/share/sr-captive-portal",
   }
