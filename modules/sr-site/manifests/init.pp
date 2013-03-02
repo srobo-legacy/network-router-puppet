@@ -19,6 +19,13 @@ class sr-site( $git_root ) {
     mode => '755',
   }
 
+  file { '/opt/sr':
+    ensure => directory,
+    owner => 'root',
+    group => 'root',
+    mode => '755',
+  }
+
   file { '/usr/local/var/sr':
     ensure => directory,
     owner => 'root',
