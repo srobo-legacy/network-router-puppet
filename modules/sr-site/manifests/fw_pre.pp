@@ -32,8 +32,12 @@ class sr-site::fw_pre {
     ensure  => present,
   }
 
-  # Chain to store authenticated users in
+  # 2 chains to store authenticated users in
   firewallchain { 'is_authenticated:filter:IPv4':
+    ensure  => present,
+  }
+
+  firewallchain { 'is_authenticated:nat:IPv4':
     ensure  => present,
   }
 
@@ -641,5 +645,154 @@ class sr-site::fw_pre {
     jump => "LOG_ACCEPT",
     proto => "tcp",
     dport => 110,
+  }
+
+  firewall { "001 Allow authenticated users":
+    chain => "PREROUTING",
+    jump => "is_authenticated",
+    table => "nat",
+  }
+
+  firewall { "002 nat - Allow to Badger":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    destination => ['176.58.112.199/32'],
+    action => "accept",
+  }
+
+  # GoDaddy OCSP and CRLs
+  firewall { "003 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.18.237", 
+    action => "accept",
+  }
+  firewall { "004 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.18.238", 
+    action => "accept",
+  }
+  firewall { "005 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.18.239", 
+    action => "accept",
+  }
+  firewall { "006 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.239.237", 
+    action => "accept",
+  }
+  firewall { "007 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.239.238", 
+    action => "accept",
+  }
+  firewall { "008 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "72.167.239.239", 
+    action => "accept",
+  }
+  firewall { "009 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "188.121.36.237", 
+    action => "accept",
+  }
+  firewall { "010 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "188.121.36.238", 
+    action => "accept",
+  }
+  firewall { "011 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "188.121.36.239", 
+    action => "accept",
+  }
+  firewall { "012 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "182.50.136.237", 
+    action => "accept",
+  }
+  firewall { "013 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "182.50.136.238", 
+    action => "accept",
+  }
+  firewall { "014 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "182.50.136.239", 
+    action => "accept",
+  }
+  firewall { "015 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "50.63.243.228", 
+    action => "accept",
+  }
+  firewall { "016 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "50.63.243.229", 
+    action => "accept",
+  }
+  firewall { "017 nat - GoDaddy OCSP/CRLs":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    destination => "50.63.243.230",
+    action => "accept",
+  }
+  firewall { "018 DNAT all HTTP to captive":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 80,
+    jump => "DNAT",
+    todest => "172.18.2.1:80",
+  }
+  firewall { "001 Masquerade all traffic":
+    table => "nat",
+    chain => "POSTROUTING",
+    jump => "MASQUERADE",
   }
 }
