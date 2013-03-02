@@ -37,4 +37,11 @@ class sr-libs::external-auth ( $git_root, $ext_auth_root_dir ) {
     require => [ File[ "/usr/share/php" ], Package[ "php5" ], Vcsrepo[ "${ext_auth_root_dir}" ] ],
   }
 
+  # Symlink to make it appear in the right place
+  file { "/usr/local/bin/create-sso-keypair":
+    ensure => 'link',
+    target => "${ext_auth_root_dir}/client/mkkeypair.sh",
+    require => Vcsrepo[ "${ext_auth_root_dir}" ],
+  }
+
 }
