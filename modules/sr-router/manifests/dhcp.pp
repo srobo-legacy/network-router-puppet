@@ -12,7 +12,7 @@ class sr-router::dhcp {
     group => 'root',
   }
 
-  exec { "/usr/local/sbin/dns-init 30":
+  exec { "/usr/local/sbin/dhcp-init 30":
     path => "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
     creates => "/etc/dhcp/sr-team-subnets.conf",
     notify => Service["isc-dhcp-server"],
