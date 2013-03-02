@@ -1,0 +1,60 @@
+#!/bin/bash
+set -e
+
+is_integer(){
+    printf "%d" $1 > /dev/null 2>&1
+    return $?
+}
+
+if [ ! -f /etc/dhcp/sr-registered-hosts.conf ]; then
+	cat <<EOF >/etc/dhcp/sr-registered-hosts.conf
+# This file is a list of all hosts registered on the Student Robotics network.
+# DO NOT MODIFY THIS FILE BY HAND.
+# Scripts to maintain this file are:
+#	sr_dhcp_register		Register a host
+#	sr_dhcp_unregister		Unregister a host
+EOF
+fi
+
+mkdir -p /etc/dhcp/subnets/
+
+rm -f /etc/dhcp/sr-team-subnets.conf
+TEAMS="$1"
+if is_integer $TEAMS; then
+	ALIAS_INDEX=1
+	while [ $ALIAS_INDEX -lt $TEAMS ]; do
+		cat <<EOF >/etc/dhcp/subnets/team-${ALIAS_INDEX}.conf
+# This file is a list of all hosts registered on a subnet of the Student Robotics network.
+# DO NOT MODIFY THIS FILE BY HAND.
+# Scripts to maintain this file are:
+#	sr_dhcp_competitor_register		Register a host
+#	sr_dhcp_competitor_unregister		Unregister a host
+
+EOF
+		cat <<EOF >>/etc/dhcp/sr-team-subnets.conf
+class "team${ALIAS_INDEX}" {
+  # This is a hack to use subclasses for each registered host!
+  match pick-first-value (hardware);
+}
+subnet 172.19.${ALIAS_INDEX}.0 netmask 255.255.255.0 {
+  pool {
+    option domain-name "team${ALIAS_INDEX}.net.studentrobotics.org";
+    default-lease-time 3600;
+    max-lease-time 7200;
+    range 172.19.${ALIAS_INDEX}.10 172.19.${ALIAS_INDEX}.99;
+    option routers 172.19.${ALIAS_INDEX}.1;
+    allow members of "team${ALIAS_INDEX}";
+    deny unknown-clients;
+    ddns-updates on;
+    ddns-domainname "team${ALIAS_INDEX}.net.studentrobotics.org";
+  }
+}
+include "/etc/dhcp/subnets/team-${ALIAS_INDEX}.conf";
+EOF
+		touch /etc/dhcp/subnets/team-${ALIAS_INDEX}.conf
+		ALIAS_INDEX=`expr $ALIAS_INDEX + 1`
+	done
+else
+	echo "ERROR: No idea how many subnets to configure for teams."
+	exit 1
+fi
