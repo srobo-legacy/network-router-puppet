@@ -9,5 +9,6 @@ class sr-router::sudo {
     mode => "440",
     owner => "root",
     group => "root",
+    require => [ Class["sr-router::groups"], Package["sudo"] ],
   }
 }
