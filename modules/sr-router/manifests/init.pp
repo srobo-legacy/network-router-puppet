@@ -3,4 +3,5 @@ class sr-router {
   include sr-router::dhcp
   include sr-router::groups
   include sr-router::sysctl
+  include sr-router::sudo
 }
