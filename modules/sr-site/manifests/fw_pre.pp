@@ -647,6 +647,18 @@ class sr-site::fw_pre {
     dport => 110,
   }
 
+  firewall { "000 LOG_ACCEPT - Add logging":
+    chain => "LOG_ACCEPT",
+    proto => "tcp",
+    jump => "LOG",
+  }
+
+  firewall { "001 LOG_ACCEPT - Accept packet":
+    chain => "LOG_ACCEPT",
+    proto => "tcp",
+    action => "accept",
+  }
+
   firewall { "001 Allow authenticated users":
     chain => "PREROUTING",
     jump => "is_authenticated",
