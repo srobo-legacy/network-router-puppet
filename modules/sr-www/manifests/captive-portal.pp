@@ -28,4 +28,17 @@ class sr-www::captive-portal($git_root){
     target => "/opt/sr/captive-portal/files/usr/share/sr-captive-portal",
   }
 
+  # Symlink the captive portal binaries in the right place
+  file{ "/usr/bin/sr-portal-grant":
+    ensure => "link",
+    target => "/opt/sr/captive-portal/files/usr/bin/sr-portal-grant",
+  }
+  file{ "/usr/bin/sr-portal-revoke":
+    ensure => "link",
+    target => "/opt/sr/captive-portal/files/usr/bin/sr-portal-revoke",
+  }
+  file{ "/usr/bin/sr-portal-status":
+    ensure => "link",
+    target => "/opt/sr/captive-portal/files/usr/bin/sr-portal-status",
+  }
 }
