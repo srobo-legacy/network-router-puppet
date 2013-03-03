@@ -14,7 +14,7 @@ class sr-router::scripts{
   # DHCP host library
   file{ "/usr/share/php/SR_DHCP_Host.php":
     ensure => "link",
-    target => "/opt/sr/router-scripts/files/usr/share/php/SR_DHCP_Host.php"
+    target => "/opt/sr/router-scripts/files/usr/share/php/SR_DHCP_Host.php",
     require => Vcsrepo["/opt/sr/router-scripts"],
   }
 
