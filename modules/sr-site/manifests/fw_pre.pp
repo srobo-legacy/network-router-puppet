@@ -698,7 +698,7 @@ class sr-site::fw_pre {
   }
 
   # GoDaddy OCSP and CRLs
-  firewall { "003 nat - GoDaddy OCSP/CRLs":
+  firewall { "050 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -706,7 +706,7 @@ class sr-site::fw_pre {
     destination => "72.167.18.237", 
     action => "accept",
   }
-  firewall { "004 nat - GoDaddy OCSP/CRLs":
+  firewall { "051 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -714,7 +714,7 @@ class sr-site::fw_pre {
     destination => "72.167.18.238", 
     action => "accept",
   }
-  firewall { "005 nat - GoDaddy OCSP/CRLs":
+  firewall { "052 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -722,7 +722,7 @@ class sr-site::fw_pre {
     destination => "72.167.18.239", 
     action => "accept",
   }
-  firewall { "006 nat - GoDaddy OCSP/CRLs":
+  firewall { "053 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -730,7 +730,7 @@ class sr-site::fw_pre {
     destination => "72.167.239.237", 
     action => "accept",
   }
-  firewall { "007 nat - GoDaddy OCSP/CRLs":
+  firewall { "054 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -738,7 +738,7 @@ class sr-site::fw_pre {
     destination => "72.167.239.238", 
     action => "accept",
   }
-  firewall { "008 nat - GoDaddy OCSP/CRLs":
+  firewall { "055 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -746,7 +746,7 @@ class sr-site::fw_pre {
     destination => "72.167.239.239", 
     action => "accept",
   }
-  firewall { "009 nat - GoDaddy OCSP/CRLs":
+  firewall { "056 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -754,7 +754,7 @@ class sr-site::fw_pre {
     destination => "188.121.36.237", 
     action => "accept",
   }
-  firewall { "010 nat - GoDaddy OCSP/CRLs":
+  firewall { "057 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -762,7 +762,7 @@ class sr-site::fw_pre {
     destination => "188.121.36.238", 
     action => "accept",
   }
-  firewall { "011 nat - GoDaddy OCSP/CRLs":
+  firewall { "058 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -770,7 +770,7 @@ class sr-site::fw_pre {
     destination => "188.121.36.239", 
     action => "accept",
   }
-  firewall { "012 nat - GoDaddy OCSP/CRLs":
+  firewall { "059 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -778,7 +778,7 @@ class sr-site::fw_pre {
     destination => "182.50.136.237", 
     action => "accept",
   }
-  firewall { "013 nat - GoDaddy OCSP/CRLs":
+  firewall { "060 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -786,7 +786,7 @@ class sr-site::fw_pre {
     destination => "182.50.136.238", 
     action => "accept",
   }
-  firewall { "014 nat - GoDaddy OCSP/CRLs":
+  firewall { "061 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -794,7 +794,7 @@ class sr-site::fw_pre {
     destination => "182.50.136.239", 
     action => "accept",
   }
-  firewall { "015 nat - GoDaddy OCSP/CRLs":
+  firewall { "062 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -802,7 +802,7 @@ class sr-site::fw_pre {
     destination => "50.63.243.228", 
     action => "accept",
   }
-  firewall { "016 nat - GoDaddy OCSP/CRLs":
+  firewall { "063 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -810,7 +810,7 @@ class sr-site::fw_pre {
     destination => "50.63.243.229", 
     action => "accept",
   }
-  firewall { "017 nat - GoDaddy OCSP/CRLs":
+  firewall { "064 nat - GoDaddy OCSP/CRLs":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
@@ -818,7 +818,17 @@ class sr-site::fw_pre {
     destination => "50.63.243.230",
     action => "accept",
   }
-  firewall { "018 DNAT all HTTP to captive":
+  
+  # Allow traffic from staff to the internet
+  firewall { "100 Prevent staff from being captive portaled":
+    iniface => "vlan104",
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    action => "accept",
+  }
+    
+  firewall { "200 DNAT all HTTP to captive":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
