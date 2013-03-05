@@ -410,105 +410,105 @@ class sr-site::fw_pre {
   }
 
   # GoDaddy OCSP and CRLs
-  firewall { "003 GoDaddy OCSP/CRLs":
+  firewall { "050 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "72.167.18.237", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "004 GoDaddy OCSP/CRLs":
+  firewall { "051 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "72.167.18.238", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "005 GoDaddy OCSP/CRLs":
+  firewall { "052 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "72.167.18.239", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "006 GoDaddy OCSP/CRLs":
+  firewall { "053 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "72.167.239.237", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "007 GoDaddy OCSP/CRLs":
+  firewall { "054 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "72.167.239.238", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "008 GoDaddy OCSP/CRLs":
+  firewall { "055 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "72.167.239.239", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "009 GoDaddy OCSP/CRLs":
+  firewall { "056 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "188.121.36.237", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "010 GoDaddy OCSP/CRLs":
+  firewall { "057 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "188.121.36.238", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "011 GoDaddy OCSP/CRLs":
+  firewall { "058 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "188.121.36.239", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "012 GoDaddy OCSP/CRLs":
+  firewall { "059 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "182.50.136.237", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "013 GoDaddy OCSP/CRLs":
+  firewall { "060 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "182.50.136.238", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "014 GoDaddy OCSP/CRLs":
+  firewall { "061 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "182.50.136.239", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "015 GoDaddy OCSP/CRLs":
+  firewall { "062 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "50.63.243.228", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "016 GoDaddy OCSP/CRLs":
+  firewall { "063 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
     destination => "50.63.243.229", 
     jump => "LOG_ACCEPT",
   }
-  firewall { "017 GoDaddy OCSP/CRLs":
+  firewall { "064 GoDaddy OCSP/CRLs":
     chain => "FORWARD",
     proto => "tcp",
     dport => 80,
@@ -516,12 +516,36 @@ class sr-site::fw_pre {
     jump => "LOG_ACCEPT",
   }
   
-  firewall { "018 Allow authenticated users":
+  # Allow traffic from staff to the internet
+  firewall { "100 Allow staff to have internet access":
+    iniface => "vlan104",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "internet_access",
+  }
+
+  # Allow traffic from staff to the competition network
+  firewall { "101 Allow staff to have compnet access":
+    iniface => "vlan104",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "compnet_access",
+  }
+
+  # Allow traffic from staff to the internet
+  firewall { "102 Allow staff to have video access":
+    iniface => "vlan104",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "video_access",
+  }
+  
+  firewall { "200 Allow authenticated users":
     chain => "FORWARD",
     jump => "is_authenticated",
   }
 
-  firewall { "019 Deny all other traffic":
+  firewall { "999 Deny all other traffic":
     chain => "FORWARD",
     action => "reject",
   }
