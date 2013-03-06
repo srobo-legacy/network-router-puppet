@@ -532,12 +532,20 @@ class sr-site::fw_pre {
     jump => "compnet_access",
   }
 
-  # Allow traffic from staff to the internet
+  # Allow traffic from staff to the video network
   firewall { "102 Allow staff to have video access":
     iniface => "vlan104",
     chain => "FORWARD",
     proto => "tcp",
     jump => "video_access",
+  }
+  
+  # Allow traffic from staff to the device management network
+  firewall { "103 Allow staff to have management access":
+    iniface => "vlan104",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "management_access",
   }
   
   firewall { "200 Allow authenticated users":
