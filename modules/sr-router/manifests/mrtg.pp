@@ -36,7 +36,8 @@ class sr-router::mrtg {
   }
   
   exec{ "/usr/local/bin/create_mrtg_config":
-    }
+    require => File["/usr/local/bin/create_mrtg_config"],
+  }
   
     
 }
