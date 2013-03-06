@@ -1,0 +1,17 @@
+#! /bin/bash
+
+UNIQATTR="name"
+
+if [ "$UNIQATTR" == "" ]; then
+	UNIQATTR=name
+fi
+
+make_config(){
+    HOST="$1"
+    UNIQATTR="$2"
+    cfgmaker --global 'WorkDir: /var/www/mrtg' --global 'Options[_]: bits,growright' --global 'Interval: 1' --global 'LogFormat: rrdtool' --global 'RunAsDaemon: yes' --ifref=${UNIQATTR} --output /etc/mrtg/conf.d/${HOST}.cfg public@${HOST}
+}
+
+for HOST in `grep 172.18.2. /etc/dhcp/sr-registered-hosts.conf | awk '{print $2;}' | sed 's/;//'`; do
+    make_config $HOST $UNIQATTR
+done
