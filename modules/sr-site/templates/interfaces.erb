@@ -5,12 +5,25 @@ iface lo inet loopback
 <% if devmode == "1" 
 vlan_interface="eth1"
 %>
-# ETH1 - UPSTREAM
+# ETH0 - UPSTREAM
 auto eth0
 iface eth0 inet dhcp
 <% else 
 vlan_interface="eth0"
 %>
+
+# VLAN 109 - UPSTREAM
+auto vlan109
+iface vlan109 inet dhcp
+	hwaddress ether 00:06:4f:9a:74:09
+	vlan-raw-device eth0
+	
+# VLAN 110 - UPSTREAM
+auto vlan110
+iface vlan110 inet dhcp
+	hwaddress ether 00:06:4f:9a:74:09
+	vlan-raw-device eth0
+
 # VLAN 107 - UPSTREAM
 auto vlan107
 iface vlan107 inet dhcp
