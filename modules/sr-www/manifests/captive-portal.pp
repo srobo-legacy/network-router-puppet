@@ -32,8 +32,8 @@ class sr-www::captive-portal($git_root){
     ensure => "directory",
     mode => "770",
     owner => "www-data",
-    group => "sr-portal-admins",
-    require => Group["sr-portal-admins"],
+    group => "sr-portaladmins",
+    require => Group["sr-portaladmins"],
   }
 
   # Symlink the captive portal binaries in the right place
