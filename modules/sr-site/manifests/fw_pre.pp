@@ -679,6 +679,27 @@ class sr-site::fw_pre {
     dport => 110,
   }
 
+  firewall { "013 internet_access - IRC":
+    chain => "internet_access",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 6667,
+  }
+
+  firewall { "014 internet_access - NTP":
+    chain => "internet_access",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 123,
+  }
+
+  firewall { "015 internet_access - NTP":
+    chain => "internet_access",
+    jump => "LOG_ACCEPT",
+    proto => "udp",
+    dport => 123,
+  }
+
   firewall { "000 LOG_ACCEPT - Add logging":
     chain => "LOG_ACCEPT",
     proto => "tcp",

@@ -35,6 +35,14 @@ class sr-router::mrtg {
     source => "puppet:///modules/sr-router/create_mrtg_config",
   }
   
+  file{ "/etc/cron.d/mrtg":
+    ensure => "present",
+    mode => "644",
+    owner => "root",
+    group => "root",
+    source => "puppet:///modules/sr-router/mrtg.cron",
+  }
+
   exec{ "/usr/local/bin/create_mrtg_config":
     require => File["/usr/local/bin/create_mrtg_config"],
   }

@@ -1,0 +1,7 @@
+# /etc/cron.d/mrtg - Automatic update mrtg config every 10 minutes
+
+SHELL=/bin/sh
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+*/5 * * * * root test -x /usr/local/bin/create_mrtg_config && /usr/local/bin/create_mrtg_config
+
