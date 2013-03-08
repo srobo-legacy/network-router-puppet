@@ -28,6 +28,14 @@ class sr-www::captive-portal($git_root){
     target => "/opt/sr/captive-portal/files/usr/share/sr-captive-portal",
   }
 
+  file{ "/usr/share/sr-captive-portal/data":
+    ensure => "directory",
+    mode => "770",
+    owner => "www-data",
+    group => "sr-portal-admins",
+    require => Group["sr-portal-admins"],
+  }
+
   # Symlink the captive portal binaries in the right place
   file{ "/usr/bin/sr-portal-grant":
     ensure => "link",
