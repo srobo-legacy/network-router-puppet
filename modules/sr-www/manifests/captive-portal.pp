@@ -17,9 +17,9 @@ class sr-www::captive-portal($git_root){
     require => [ Package[ "php5" ], File["/opt/sr"] ],
   }
 
-  exec{ "/usr/share/sr-external-auth/client/mkkeypair.sh /etc/sr-captive-portal/key":
-    require => [ File["/etc/sr-captive-portal/"], File["/usr/local/bin/create-sso-keypair"] ],
-    creates => "/etc/sr-captive-portal/key",
+  exec{ "wget -O /etc/sr-captive-portal/key.pub https://www.studentrobotics.org/external-auth/control.php/keys/get_public":
+    require => [ File["/etc/sr-captive-portal/"] ],
+    creates => "/etc/sr-captive-portal/key.pub",
   }
 
   # Symlink the captive portal files into place
