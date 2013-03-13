@@ -39,8 +39,8 @@ iface vlan107 inet dhcp
 	vlan-raw-device eth0
 
 # VLAN 1 - Infrastructure/Management network
-auto vlan102
-iface vlan102 inet static
+auto eth0
+iface eth0 inet static
 	address 172.18.2.1
 	network 172.18.2.0
 	netmask 255.255.255.0
