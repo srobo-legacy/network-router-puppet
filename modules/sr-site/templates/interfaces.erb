@@ -8,6 +8,14 @@ vlan_interface="eth1"
 # ETH0 - UPSTREAM
 auto eth0
 iface eth0 inet dhcp
+
+# ETH1 - downstream
+auto eth0
+iface eth1 inet static
+	address 172.18.2.1
+	network 172.18.2.0
+	netmask 255.255.255.0
+
 <% else 
 vlan_interface="eth0"
 %>
@@ -29,7 +37,6 @@ auto vlan107
 iface vlan107 inet dhcp
 	hwaddress ether 00:06:4f:9a:74:09
 	vlan-raw-device eth0
-<% end %>
 
 # VLAN 1 - Infrastructure/Management network
 auto vlan102
@@ -38,6 +45,8 @@ iface vlan102 inet static
 	network 172.18.2.0
 	netmask 255.255.255.0
 	vlan-raw-device <%= vlan_interface %>
+<% end %>
+
 
 # VLAN 103 - Competitor network
 auto vlan103
