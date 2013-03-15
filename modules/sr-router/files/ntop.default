@@ -1,0 +1,15 @@
+# This file will normally include the debconf template but you can disable
+# that and use this file only.
+
+if [ -f /var/lib/ntop/init.cfg ]; then
+        . /var/lib/ntop/init.cfg
+        fi
+
+# set ENABLED to 0 if you want to avoid ntop being started at system boot
+ENABLED=1
+
+# Additional command line options passed when invoking ntop
+# Disable DNS resolution, as it makes ntop crash
+# Also disable interface merging
+# ENABLE sticky hosts
+GETOPT="-n 0 -M -c"
