@@ -1,6 +1,6 @@
 class sr-router::mrtg {
 
-  package{ ["mrtg", "snmp", "snmpd"]:
+  package{ ["mrtg", "snmp", "snmpd", "rrdtool"]:
     ensure => "latest",
   }
 
