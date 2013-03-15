@@ -109,6 +109,7 @@ network	IN	CNAME	router
 status	IN	CNAME	router
 auth	IN	CNAME	router
 ntop	IN	CNAME	router
+mrtg	IN	CNAME	router
 
 router.regnet	IN	CNAME	router
 
