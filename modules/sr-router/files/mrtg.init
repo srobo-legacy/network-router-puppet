@@ -14,7 +14,7 @@
 ### END INIT INFO
 
 ## definitions ##
-MRTGBin="mrtg"
+MRTGBin="/usr/bin/mrtg"
 MRTGConfig="/etc/mrtg.cfg"
 MRTGPidFile="/var/run/mrtg.pid"
 MRTGUser=www-data
