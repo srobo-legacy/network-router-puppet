@@ -9,7 +9,7 @@ fi
 make_config(){
     HOST="$1"
     UNIQATTR="$2"
-    cfgmaker --global 'WorkDir: /var/www/mrtg' --global 'Options[_]: bits,growright' --global 'Interval: 1' --global 'LogFormat: rrdtool' --global 'RunAsDaemon: yes' --ifref=${UNIQATTR} --output /etc/mrtg/conf.d/${HOST}.cfg public@${HOST}
+    cfgmaker --no-down --zero-speed=1000000000 --global 'WorkDir: /var/www/mrtg' --global 'Options[_]: bits,growright' --global 'Interval: 1' --global 'LogFormat: rrdtool' --global 'RunAsDaemon: yes' --ifref=${UNIQATTR} --output /etc/mrtg/conf.d/${HOST}.cfg public@${HOST}
 }
 
 for HOST in `grep 172.18.2. /etc/dhcp/sr-registered-hosts.conf | awk '{print $2;}' | sed 's/;//'`; do
