@@ -1,0 +1,53 @@
+#
+# chkconfig: 345 99 01
+# description: MRTG Traffic Grapher
+### BEGIN INIT INFO
+# Provides:          mrtg
+# Required-Start:    $local_fs $remote_fs $syslog $named $network $time
+# Required-Stop:     $local_fs $remote_fs $syslog $named $network
+# Should-Start:
+# Should-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start and stop MRTG captureg daemon
+# Description:       Multi Router Traffic Grapher
+### END INIT INFO
+
+## definitions ##
+MRTGBin="mrtg"
+MRTGConfig="/etc/mrtg.cfg"
+MRTGPidFile="/var/run/mrtg.pid"
+MRTGUser=www-data
+MRTGGroup=www-data
+
+# Check that mrtg exists.
+if [ ! -f $MRTGBin ]; then
+    echo "Executable file $MRTGBin not found.  Exiting."
+    exit 1
+fi
+
+## MAIN ##
+# See how we were called.
+case "$1" in
+
+	start)
+		su -c "env LANG=C ${MRTGBin} ${MRTGConfig}" ${MRTGUser}
+		;;
+
+	stop)
+		killall -2 mrtg
+		sleep 5
+		if [ "`pidof mrtg`" != "" ]; then
+			killall -9 mrtg
+		fi
+		;;
+
+
+	*)
+		echo "Usage: mrtg {start|stop|restart|reload|force-reload|status|checkconfig|show-errors}"
+		exit 1
+		;;
+
+esac
+
+# End of this script
