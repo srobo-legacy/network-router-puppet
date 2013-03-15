@@ -32,8 +32,8 @@ class sr-router::mrtg {
   file{ "/var/www/mrtg":
     ensure => "directory",
     mode => "755",
-    owner => "root",
-    group => "root",
+    owner => "www-data",
+    group => "www-data",
     require => Package["apache2"],
   }
 
