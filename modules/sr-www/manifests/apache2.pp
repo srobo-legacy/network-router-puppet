@@ -21,6 +21,11 @@ class sr-www::apache2 {
     notify => Service["apache2"],
   }
 
+  exec { "/usr/sbin/a2enmod proxy_http":
+    creates => "/etc/apache2/mods-enabled/proxy_http.load",
+    notify => Service["apache2"],
+  }
+
   file { "/etc/apache2/sites-enabled/000-default":
     ensure => 'link',
     target => '/etc/apache2/sites-available/default',
