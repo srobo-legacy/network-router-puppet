@@ -24,7 +24,7 @@ class sr-router::mrtg {
     ensure => present,
     owner => 'root',
     group => 'root',
-    mode => '755',
+    mode => '644',
     source => 'puppet:///modules/sr-router/mrtg.cfg',
     before => Service['mrtg'],
   }
