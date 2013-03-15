@@ -19,6 +19,16 @@ class sr-router::mrtg {
     require => File["/etc/mrtg/"],
   }
   
+  # MRTG configuration
+  file { '/etc/mrtg.cfg':
+    ensure => present,
+    owner => 'root',
+    group => 'root',
+    mode => '755',
+    source => 'puppet:///modules/sr-router/mrtg.cfg',
+    before => Service['mrtg'],
+  }
+
   file{ "/var/www/mrtg":
     ensure => "directory",
     mode => "755",
