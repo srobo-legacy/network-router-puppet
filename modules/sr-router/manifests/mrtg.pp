@@ -50,7 +50,7 @@ class sr-router::mrtg {
   }
 
   exec { "/usr/sbin/a2ensite mrtg.net.studentrobotics.org":
-    creates => "/etc/apache2/sites-enabled/mrtg.net.studentrobotics.org"
+    creates => "/etc/apache2/sites-enabled/mrtg.net.studentrobotics.org",
     require => File["/etc/apache2/sites-available/mrtg.net.studentrobotics.org"],
   }
 
