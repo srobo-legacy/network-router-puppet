@@ -865,6 +865,22 @@ class sr-site::fw_pre {
     jump => "DNAT",
     todest => "172.18.2.1:80",
   }
+  firewall { "210 DNAT all DNS to local (UDP)":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "udp",
+    dport => 53,
+    jump => "DNAT",
+    todest => "172.18.2.1:53",
+  }
+  firewall { "211 DNAT all DNS to local (TCP)":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 53,
+    jump => "DNAT",
+    todest => "172.18.2.1:53",
+  }
   firewall { "001 Masquerade all traffic":
     table => "nat",
     chain => "POSTROUTING",
