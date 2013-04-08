@@ -1,4 +1,4 @@
-class sr-router::helpdesk-tracker{
+class sr-router::helpdesk{
 
   # Maintain a checkout of the external auth system
   vcsrepo { "/opt/sr/helpdesk-tracker":
