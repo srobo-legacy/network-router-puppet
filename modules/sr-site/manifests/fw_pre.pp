@@ -547,6 +547,22 @@ class sr-site::fw_pre {
     proto => "tcp",
     jump => "management_access",
   }
+
+  # Allow traffic from video to the internet (NO FILTER)
+  firewall { "110 Allow video to have internet access":
+    iniface => "vlan106",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "LOG_ACCEPT",
+  }
+
+  # Allow traffic from compnet to staff
+  firewall { "120 Allow compnet to have staff access":
+    iniface => "vlan105",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "staff_access",
+  }
   
   firewall { "200 Allow authenticated users":
     chain => "FORWARD",
