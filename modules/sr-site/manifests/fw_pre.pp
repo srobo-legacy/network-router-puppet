@@ -716,6 +716,13 @@ class sr-site::fw_pre {
     dport => 123,
   }
 
+  firewall { "016 internet_access - GIT":
+    chain => "internet_access",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 9418,
+  }
+
   firewall { "000 LOG_ACCEPT - Add logging":
     chain => "LOG_ACCEPT",
     proto => "tcp",
