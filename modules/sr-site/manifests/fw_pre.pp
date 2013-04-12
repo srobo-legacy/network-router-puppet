@@ -880,6 +880,24 @@ class sr-site::fw_pre {
     action => "accept",
   }
     
+  # Allow traffic from staff to the internet
+  firewall { "101 Prevent compnet from being captive portaled":
+    iniface => "vlan105",
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    action => "accept",
+  }
+
+  # Allow traffic from staff to the internet
+  firewall { "102 Prevent video from being captive portaled":
+    iniface => "vlan106",
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    action => "accept",
+  }
+
   firewall { "200 DNAT all HTTP to captive":
     table => "nat",
     chain => "PREROUTING",
