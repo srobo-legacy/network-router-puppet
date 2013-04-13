@@ -547,6 +547,22 @@ class sr-site::fw_pre {
     proto => "tcp",
     jump => "management_access",
   }
+
+  # Allow traffic from video to the internet (NO FILTER)
+  firewall { "110 Allow video to have internet access":
+    iniface => "vlan106",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "LOG_ACCEPT",
+  }
+
+  # Allow traffic from compnet to staff
+  firewall { "120 Allow compnet to have staff access":
+    iniface => "vlan105",
+    chain => "FORWARD",
+    proto => "tcp",
+    jump => "staff_access",
+  }
   
   firewall { "200 Allow authenticated users":
     chain => "FORWARD",
@@ -698,6 +714,13 @@ class sr-site::fw_pre {
     jump => "LOG_ACCEPT",
     proto => "udp",
     dport => 123,
+  }
+
+  firewall { "016 internet_access - GIT":
+    chain => "internet_access",
+    jump => "LOG_ACCEPT",
+    proto => "tcp",
+    dport => 9418,
   }
 
   firewall { "000 LOG_ACCEPT - Add logging":
@@ -857,6 +880,24 @@ class sr-site::fw_pre {
     action => "accept",
   }
     
+  # Allow traffic from staff to the internet
+  firewall { "101 Prevent compnet from being captive portaled":
+    iniface => "vlan105",
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    action => "accept",
+  }
+
+  # Allow traffic from staff to the internet
+  firewall { "102 Prevent video from being captive portaled":
+    iniface => "vlan106",
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    action => "accept",
+  }
+
   firewall { "200 DNAT all HTTP to captive":
     table => "nat",
     chain => "PREROUTING",
@@ -864,6 +905,22 @@ class sr-site::fw_pre {
     dport => 80,
     jump => "DNAT",
     todest => "172.18.2.1:80",
+  }
+  firewall { "210 DNAT all DNS to local (UDP)":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "udp",
+    dport => 53,
+    jump => "DNAT",
+    todest => "172.18.2.1:53",
+  }
+  firewall { "211 DNAT all DNS to local (TCP)":
+    table => "nat",
+    chain => "PREROUTING",
+    proto => "tcp",
+    dport => 53,
+    jump => "DNAT",
+    todest => "172.18.2.1:53",
   }
   firewall { "001 Masquerade all traffic":
     table => "nat",
