@@ -1,3 +1,3 @@
-# Listen on vlan102-106
-INTERFACES="eth0 vlan103 vlan104 vlan105 vlan106 vlan108"
+# Listen on the interfaces
+INTERFACES="eth1 eth2"
 

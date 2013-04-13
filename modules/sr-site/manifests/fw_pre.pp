@@ -2,31 +2,6 @@ class sr-site::fw_pre {
 
   # Create some firewall chains for forwarding
 
-  # Access to the management network
-  firewallchain { 'management_access:filter:IPv4':
-    ensure  => present,
-  }
-
-  # Access to the competitor network
-  firewallchain { 'competitor_access:filter:IPv4':
-    ensure  => present,
-  }
-
-  # Access to the staff network
-  firewallchain { 'staff_access:filter:IPv4':
-    ensure  => present,
-  }
-
-  # Access to the competition service network
-  firewallchain { 'compnet_access:filter:IPv4':
-    ensure  => present,
-  }
-
-  # Access to the video hosts
-  firewallchain { 'video_access:filter:IPv4':
-    ensure  => present,
-  }
-
   # Chain that allows internet access
   firewallchain { 'internet_access:filter:IPv4':
     ensure  => present,
@@ -77,16 +52,8 @@ class sr-site::fw_pre {
   }
 
   # Allow management network to connect to ssh.
-  firewall { "002 ssh from management":
-    iniface => "vlan102",
-    proto  => "tcp",
-    dport => 22,
-    action => "accept",
-  }
-
-  # Allow staff to connect to SSH
-  firewall { "003 ssh from staff":
-    iniface => "vlan104",
+  firewall { "002 ssh from staff network":
+    iniface => "eth1",
     proto  => "tcp",
     dport => 22,
     action => "accept",
@@ -106,15 +73,14 @@ class sr-site::fw_pre {
     action => "accept",
   }
 
-  # Allow NTP from management
+  # Allow NTP
   firewall { "006 NTP":
-    iniface => "vlan102",
     proto => "udp",
     dport => 123,
     action => "accept",
   }
 
-  # Allow NTP from management
+  # Allow DHCP
   firewall { "007 DHCP clients":
     proto => "udp",
     sport => 68,
@@ -144,240 +110,70 @@ class sr-site::fw_pre {
   }
 
   # NFS for PXE Clients
-  firewall { "011 NFS UDP 111 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
+  firewall { "011 NFS UDP 111":
     proto => "udp",
     dport => 111,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "012 NFS UDP 111 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
+  firewall { "014 NFS UDP 2049":
     proto => "udp",
-    dport => 111,
+    dport => 2049,
     action => "accept",
   }
-
+  
   # NFS for PXE Clients
-  firewall { "013 NFS UDP 111 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "udp",
-    dport => 111,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "014 NFS UDP 2049 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
+  firewall { "017 NFS UDP 4000":
     proto => "udp",
     dport => 2049,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "015 NFS UDP 2049 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "udp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "016 NFS UDP 2049 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "udp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "017 NFS UDP 4000 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
-    proto => "udp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "018 NFS UDP 4000 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "udp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "019 NFS UDP 4000 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "udp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "020 NFS UDP 4001 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
+  firewall { "020 NFS UDP 4001":
     proto => "udp",
     dport => 4001,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "021 NFS UDP 4001 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "udp",
-    dport => 4001,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "022 NFS UDP 4001 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "udp",
-    dport => 4001,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "023 NFS UDP 4002 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
+  firewall { "023 NFS UDP 4002":
     proto => "udp",
     dport => 4002,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "024 NFS UDP 4002 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "udp",
-    dport => 4002,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "025 NFS UDP 4002 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "udp",
-    dport => 4002,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "011 NFS TCP 111 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
+  firewall { "011 NFS TCP 111":
     proto => "tcp",
     dport => 111,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "012 NFS TCP 111 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "tcp",
-    dport => 111,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "013 NFS TCP 111 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "tcp",
-    dport => 111,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "014 NFS TCP 2049 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
+  firewall { "014 NFS TCP 2049":
     proto => "tcp",
     dport => 2049,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "015 NFS TCP 2049 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
+  firewall { "017 NFS TCP 4000":
     proto => "tcp",
     dport => 2049,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "016 NFS TCP 2049 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "tcp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "017 NFS TCP 4000 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
-    proto => "tcp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "018 NFS TCP 4000 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "tcp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "019 NFS TCP 4000 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "tcp",
-    dport => 2049,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "020 NFS TCP 4001 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
+  firewall { "020 NFS TCP 4001":
     proto => "tcp",
     dport => 4001,
     action => "accept",
   }
 
   # NFS for PXE Clients
-  firewall { "021 NFS TCP 4001 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "tcp",
-    dport => 4001,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "022 NFS TCP 4001 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
-    proto => "tcp",
-    dport => 4001,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "023 NFS TCP 4002 (Arena PXE)":
-    source => [ '172.18.5.0/24' ],
-    proto => "tcp",
-    dport => 4002,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "024 NFS TCP 4002 (Competitor PXE)":
-    source => [ '172.18.7.0/24' ],
-    proto => "tcp",
-    dport => 4002,
-    action => "accept",
-  }
-
-  # NFS for PXE Clients
-  firewall { "025 NFS TCP 4002 (Staff PXE)":
-    source => [ '172.18.8.0/24' ],
+  firewall { "023 NFS TCP 4002":
     proto => "tcp",
     dport => 4002,
     action => "accept",
@@ -518,52 +314,12 @@ class sr-site::fw_pre {
   
   # Allow traffic from staff to the internet
   firewall { "100 Allow staff to have internet access":
-    iniface => "vlan104",
+    iniface => "eth1",
     chain => "FORWARD",
     proto => "tcp",
     jump => "internet_access",
   }
 
-  # Allow traffic from staff to the competition network
-  firewall { "101 Allow staff to have compnet access":
-    iniface => "vlan104",
-    chain => "FORWARD",
-    proto => "tcp",
-    jump => "compnet_access",
-  }
-
-  # Allow traffic from staff to the video network
-  firewall { "102 Allow staff to have video access":
-    iniface => "vlan104",
-    chain => "FORWARD",
-    proto => "tcp",
-    jump => "video_access",
-  }
-  
-  # Allow traffic from staff to the device management network
-  firewall { "103 Allow staff to have management access":
-    iniface => "vlan104",
-    chain => "FORWARD",
-    proto => "tcp",
-    jump => "management_access",
-  }
-
-  # Allow traffic from video to the internet (NO FILTER)
-  firewall { "110 Allow video to have internet access":
-    iniface => "vlan106",
-    chain => "FORWARD",
-    proto => "tcp",
-    jump => "LOG_ACCEPT",
-  }
-
-  # Allow traffic from compnet to staff
-  firewall { "120 Allow compnet to have staff access":
-    iniface => "vlan105",
-    chain => "FORWARD",
-    proto => "tcp",
-    jump => "staff_access",
-  }
-  
   firewall { "200 Allow authenticated users":
     chain => "FORWARD",
     jump => "is_authenticated",
@@ -572,36 +328,6 @@ class sr-site::fw_pre {
   firewall { "999 Deny all other traffic":
     chain => "FORWARD",
     action => "reject",
-  }
-
-  firewall { "000 management_access - Default rule":
-    chain => "management_access",
-    proto => "tcp",
-    jump => "LOG_ACCEPT",
-  }
-
-  firewall { "000 competitor_access - Default rule":
-    chain => "competitor_access",
-    proto => "tcp",
-    jump => "LOG_ACCEPT",
-  }
-
-  firewall { "000 staff_access - Default rule":
-    chain => "staff_access",
-    proto => "tcp",
-    jump => "LOG_ACCEPT",
-  }
-
-  firewall { "000 compnet_access - Default rule":
-    chain => "compnet_access",
-    proto => "tcp",
-    jump => "LOG_ACCEPT",
-  }
-
-  firewall { "000 video_access - Default rule":
-    chain => "video_access",
-    proto => "tcp",
-    jump => "LOG_ACCEPT",
   }
 
   firewall { "000 internet_access - ICMP ping request":
@@ -873,38 +599,20 @@ class sr-site::fw_pre {
   
   # Allow traffic from staff to the internet
   firewall { "100 Prevent staff from being captive portaled":
-    iniface => "vlan104",
+    iniface => "eth1",
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
     action => "accept",
   }
-    
-  # Allow traffic from staff to the internet
-  firewall { "101 Prevent compnet from being captive portaled":
-    iniface => "vlan105",
-    table => "nat",
-    chain => "PREROUTING",
-    proto => "tcp",
-    action => "accept",
-  }
-
-  # Allow traffic from staff to the internet
-  firewall { "102 Prevent video from being captive portaled":
-    iniface => "vlan106",
-    table => "nat",
-    chain => "PREROUTING",
-    proto => "tcp",
-    action => "accept",
-  }
-
+  
   firewall { "200 DNAT all HTTP to captive":
     table => "nat",
     chain => "PREROUTING",
     proto => "tcp",
     dport => 80,
     jump => "DNAT",
-    todest => "172.18.2.1:80",
+    todest => "172.18.0.1:80",
   }
   firewall { "210 DNAT all DNS to local (UDP)":
     table => "nat",
@@ -912,7 +620,7 @@ class sr-site::fw_pre {
     proto => "udp",
     dport => 53,
     jump => "DNAT",
-    todest => "172.18.2.1:53",
+    todest => "172.18.0.1:53",
   }
   firewall { "211 DNAT all DNS to local (TCP)":
     table => "nat",
@@ -920,7 +628,7 @@ class sr-site::fw_pre {
     proto => "tcp",
     dport => 53,
     jump => "DNAT",
-    todest => "172.18.2.1:53",
+    todest => "172.18.0.1:53",
   }
   firewall { "001 Masquerade all traffic":
     table => "nat",

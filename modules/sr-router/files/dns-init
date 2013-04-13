@@ -102,8 +102,8 @@ cat <<EOF >/etc/bind/db.net.studentrobotics.org
 			 604800 )	; Negative Cache TTL
 ;
 @	IN	NS	router.net.studentrobotics.org.
-@	IN	A	172.18.2.1
-router	IN	A	172.18.2.1
+@	IN	A	172.18.0.1
+router	IN	A	172.18.0.1
 gateway	IN	CNAME	router
 network	IN	CNAME	router
 status	IN	CNAME	router

@@ -2,88 +2,20 @@
 auto lo
 iface lo inet loopback
 
-<% if devmode == "1" 
-vlan_interface="eth1"
-%>
 # ETH0 - UPSTREAM
 auto eth0
 iface eth0 inet dhcp
 
-# ETH1 - downstream
-auto eth0
+# ETH1 - Staff network
+auto eth1
 iface eth1 inet static
-	address 172.18.2.1
-	network 172.18.2.0
-	netmask 255.255.255.0
-
-<% else 
-vlan_interface="eth0"
-%>
-
-# VLAN 109 - UPSTREAM
-auto vlan109
-iface vlan109 inet dhcp
-	hwaddress ether 00:06:4f:9a:74:09
-	vlan-raw-device eth0
-	
-# VLAN 110 - UPSTREAM
-auto vlan110
-iface vlan110 inet dhcp
-	hwaddress ether 00:06:4f:9a:74:09
-	vlan-raw-device eth0
-
-# VLAN 107 - UPSTREAM
-auto vlan107
-iface vlan107 inet dhcp
-	hwaddress ether 00:06:4f:9a:74:09
-	vlan-raw-device eth0
-
-# VLAN 1 - Infrastructure/Management network
-auto eth0
-iface eth0 inet static
-	address 172.18.2.1
-	network 172.18.2.0
-	netmask 255.255.255.0
-	vlan-raw-device <%= vlan_interface %>
-<% end %>
-
+	address 172.18.0.1
+	network 172.18.0.0
+	netmask 255.255.252.0
 
 # VLAN 103 - Competitor network
-auto vlan103
-iface vlan103 inet static
+auto eth2
+iface eth2 inet static
 	address 172.19.0.1
 	network 172.19.0.0
-	netmask 255.255.0.0
-	vlan-raw-device <%= vlan_interface %>
-	
-# VLAN 104 - Staff network
-auto vlan104
-iface vlan104 inet static
-	address 172.18.4.1
-	network 172.18.4.0
-	netmask 255.255.255.0
-	vlan-raw-device <%= vlan_interface %>
-
-# VLAN 105 - Competition Services
-auto vlan105
-iface vlan105 inet static
-	address 172.18.5.1
-	network 172.18.5.0
-	netmask 255.255.255.0
-	vlan-raw-device <%= vlan_interface %>
-
-# VLAN 106 - Video
-auto vlan106
-iface vlan106 inet static
-	address 172.18.6.1
-	network 172.18.6.0
-	netmask 255.255.255.0
-	vlan-raw-device <%= vlan_interface %>
-
-# VLAN 108 - PXE Clients
-auto vlan108
-iface vlan108 inet static
-	address 172.18.8.1
-	network 172.18.8.0
-	netmask 255.255.255.0
-	vlan-raw-device <%= vlan_interface %>
+	netmask 255.255.252.0
